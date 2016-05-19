@@ -5,7 +5,7 @@ const PlayButton = React.createClass({
     render () {
         return (
             <button onClick={() => {
-                synth();
+                synth({freq: this.props.getFreq()});
             }}>Play!</button>
         );
     }
