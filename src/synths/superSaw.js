@@ -3,9 +3,10 @@ const masterGain = ctx.createGain();
 
 masterGain.connect(ctx.destination);
 
-function synth ({freq = 440, dur = 1, gain = 0.5} = {}) {
+function synth ({freq = 440, dur = 1, gain = 0.5, at = 0} = {}) {
     const now = ctx.currentTime;
-    const endTime = now + dur;
+    const startTime = now + at;
+    const endTime = startTime + dur;
     const gainNode = ctx.createGain();
     const osc = ctx.createOscillator();
 
@@ -14,7 +15,7 @@ function synth ({freq = 440, dur = 1, gain = 0.5} = {}) {
     osc.frequency.value = freq;
     osc.connect(gainNode);
     gainNode.connect(masterGain);
-    osc.start(now);
+    osc.start(startTime);
     // smooth attack
     gainNode.gain.linearRampToValueAtTime(gain, now + 0.05);
     // create AudioParam event at time next linear ramp begins.
@@ -25,7 +26,5 @@ function synth ({freq = 440, dur = 1, gain = 0.5} = {}) {
 
     return osc;
 };
-
-window.ctx = ctx;
 
 export default synth;
