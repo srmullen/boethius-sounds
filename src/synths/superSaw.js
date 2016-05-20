@@ -1,9 +1,5 @@
-const ctx = new AudioContext();
-const masterGain = ctx.createGain();
 
-masterGain.connect(ctx.destination);
-
-function synth ({freq = 440, dur = 1, gain = 0.5, at = 0} = {}) {
+function synth (ctx, out, {freq = 440, dur = 1, gain = 0.5, at = 0} = {}) {
     const now = ctx.currentTime;
     const startTime = now + at;
     const endTime = startTime + dur;
@@ -14,7 +10,7 @@ function synth ({freq = 440, dur = 1, gain = 0.5, at = 0} = {}) {
     osc.type = "square";
     osc.frequency.value = freq;
     osc.connect(gainNode);
-    gainNode.connect(masterGain);
+    gainNode.connect(out);
     osc.start(startTime);
     // smooth attack
     gainNode.gain.linearRampToValueAtTime(gain, now + 0.05);

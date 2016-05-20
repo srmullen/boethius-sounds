@@ -1,15 +1,20 @@
 import React from "react";
 import PlayButton from "./PlayButton";
+import PauseButton from "./PauseButton";
 import CodeMirror from "react-codemirror";
 import {parser} from "boethius-lang";
 import * as musicBox from "./musicBox";
 
-window.musicBox = musicBox;
-
 const Player = React.createClass({
     getInitialState () {
+        const ctx = new AudioContext();
+        const masterGain = ctx.createGain();
+        masterGain.connect(ctx.destination);
+        // ctx and masterGain should maybe be props
         return {
-            code: ""
+            code: "",
+            ctx,
+            masterGain
         }
     },
 
@@ -22,16 +27,20 @@ const Player = React.createClass({
     render () {
         return (
             <div>
-                <PlayButton getMusic={() => {
-                    try {
-                        return parser.parse(this.state.code).map(item => {
-                            return {...item, ...musicBox.noteInfo(item.pitch)};
-                        });
-                    } catch (e) {
-                        console.error(e);
-                    }
+                <PlayButton
+                    ctx={this.state.ctx}
+                    out={this.state.masterGain}
+                    getMusic={() => {
+                        try {
+                            return parser.parse(this.state.code).map(item => {
+                                return {...item, ...musicBox.noteInfo(item.pitch)};
+                            });
+                        } catch (e) {
+                            console.error(e);
+                        }
 
                 }} />
+                <PauseButton ctx={this.state.ctx} />
                 <CodeMirror
                     value={this.state.code}
                     options={{lineNumbers: true}}

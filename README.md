@@ -7,3 +7,4 @@ TODO
 ----
 - tempo
 - multiple voices
+- PauseButton - AudioContext per play that can be suspended.
