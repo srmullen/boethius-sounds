@@ -10,7 +10,7 @@ const PlayButton = React.createClass({
                 } else {
                     const music = this.props.getMusic();
                     music.map((item, i) => {
-                        synth(this.props.ctx, this.props.out, {freq: item.frequency, at: i});
+                        synth(this.props.ctx, this.props.out, item);
                     });
                 }
             }}>Play!</button>

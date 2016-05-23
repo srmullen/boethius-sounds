@@ -3,7 +3,7 @@ import PlayButton from "./PlayButton";
 import PauseButton from "./PauseButton";
 import CodeMirror from "react-codemirror";
 import {parser} from "boethius-lang";
-import * as musicBox from "./musicBox";
+import {calculateAndSetTimes} from "./time";
 
 const Player = React.createClass({
     getInitialState () {
@@ -32,7 +32,9 @@ const Player = React.createClass({
                     out={this.state.masterGain}
                     getMusic={() => {
                         try {
-                            return parser.parse(this.state.code);
+                            const items = calculateAndSetTimes(parser.parse(this.state.code));
+                            console.log(items);
+                            return items;
                         } catch (e) {
                             console.error(e);
                         }

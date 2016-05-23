@@ -1,14 +1,14 @@
 
-function synth (ctx, out, {freq = 440, dur = 1, gain = 0.5, at = 0} = {}) {
+function synth (ctx, out, {frequency = 440, value = 4, gain = 0.5, time = 0} = {}) {
     const now = ctx.currentTime;
-    const startTime = now + at;
-    const endTime = startTime + dur;
+    const startTime = now + time;
+    const endTime = startTime + 1/value;
     const gainNode = ctx.createGain();
     const osc = ctx.createOscillator();
 
     gainNode.gain.setValueAtTime(gain, now);
     osc.type = "square";
-    osc.frequency.value = freq;
+    osc.frequency.value = frequency;
     osc.connect(gainNode);
     gainNode.connect(out);
     osc.start(startTime);

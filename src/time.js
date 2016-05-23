@@ -1,5 +1,17 @@
 import F from "fraction.js";
 
+function isNote (item) {
+	return item.type === "note";
+}
+
+function isChord (item) {
+	return item.type === "chord";
+}
+
+function isRest (item) {
+	return item.type === "rest";
+}
+
 /*
  * From Boethius timeUtils
  * @param item - Scored item. Given an item, return the rational duration of the item;
@@ -8,12 +20,11 @@ import F from "fraction.js";
 export function calculateDuration (item) {
 
 	// If the event has no type it has no duration.
-	// if (!item.type) return 0;
 	if (!(isNote(item) || isChord(item) || isRest(item))) return 0;
 
 	let s = item.tuplet ? item.tuplet.split("/") : null,
 		tuplet = s ? new F(s[0], s[1]) : null,
-		dur = new F(1, item.value),
+		dur = new F(1, item.value || 4), // 4 is default quarter note
 		dots = item.dots || 0;
 
 	for (let i = 0; i < dots; i++) {
@@ -35,7 +46,7 @@ export function calculateDuration (item) {
  */
 export function calculateAndSetTimes (items, offset=0) {
     return items.reduce((acc, item) => {
-        let previousItem = _.last(acc);
+        const previousItem = acc[acc.length - 1];
 
         if (previousItem) {
             item.time = F(previousItem.time).add(calculateDuration(previousItem)).add(offset).valueOf();
@@ -43,6 +54,6 @@ export function calculateAndSetTimes (items, offset=0) {
             item.time = 0;
         }
 
-        return concat(acc, item);
+		return acc.concat([item]);
     }, []);
 }
