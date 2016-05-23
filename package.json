@@ -10,7 +10,7 @@
   "author": "Sean Mullen <srmullen13@gmail.com> (http://seanmullen.me/)",
   "license": "ISC",
   "dependencies": {
-    "boethius-lang": "0.0.1",
+    "boethius-lang": "0.0.5",
     "codemirror": "^5.14.2",
     "react-codemirror": "^0.2.6"
   },
