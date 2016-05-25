@@ -8,10 +8,12 @@ const PlayButton = React.createClass({
                 if (this.props.ctx.state === "suspended") {
                     this.props.ctx.resume();
                 } else {
-                    const music = this.props.getMusic();
-                    music.map((item, i) => {
-                        if (item.type !== "rest") synth(this.props.ctx, this.props.out, item);
-                    });
+                    const voices = this.props.getMusic();
+                    for (let voice in voices) {
+                        voices[voice].map((item, i) => {
+                            if (item.type !== "rest") synth(this.props.ctx, this.props.out, item);
+                        });
+                    }
                 }
             }}>Play!</button>
         );

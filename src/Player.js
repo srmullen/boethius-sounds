@@ -32,9 +32,26 @@ const Player = React.createClass({
                     out={this.state.masterGain}
                     getMusic={() => {
                         try {
-                            const items = calculateAndSetTimes(parser.parse(this.state.code));
-                            console.log(items);
-                            return items;
+                            const parsed = parser.parse(this.state.code);
+
+                            const voices = parsed.reduce((acc, item) => {
+                                if (acc[item.voice]) {
+                                    acc[item.voice].push(item);
+                                } else {
+                                    acc[item.voice] = [item];
+                                }
+
+                                return acc;
+                            }, {});
+
+                            // const items = calculateAndSetTimes(parsed);
+                            for (let voice in voices) {
+                                voices[voice] = calculateAndSetTimes(voices[voice]);
+                            }
+
+                            console.log(voices);
+
+                            return voices;
                         } catch (e) {
                             console.error(e);
                         }
