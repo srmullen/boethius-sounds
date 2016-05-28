@@ -1,6 +1,7 @@
 import React from "react";
 import PlayButton from "./PlayButton";
 import PauseButton from "./PauseButton";
+import StopButton from "./StopButton";
 import CodeMirror from "react-codemirror";
 import {parser} from "boethius-lang";
 import {calculateAndSetTimes} from "./time";
@@ -58,6 +59,7 @@ const Player = React.createClass({
 
                 }} />
                 <PauseButton ctx={this.state.ctx} />
+                <StopButton /> 
                 <CodeMirror
                     value={this.state.code}
                     options={{lineNumbers: true}}

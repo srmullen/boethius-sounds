@@ -5,7 +5,12 @@ const PauseButton = React.createClass({
         return (
             <button onClick={() => {
                 this.props.ctx.suspend();
-            }}>Pause!</button>
+            }}>
+                <svg className="icon icon-pause2" viewBox="0 0 32 32">
+                    <title>pause2</title>
+                    <path class="path1" d="M4 4h10v24h-10zM18 4h10v24h-10z"></path>
+                </svg>
+            </button>
         );
     }
 });
