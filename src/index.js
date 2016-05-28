@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import superSaw from "./synths/superSaw";
-import Player from "./Player";
-
+import Root from "./Root";
 ReactDOM.render(
-    <Player />,
+    <Root />,
     document.getElementById("root")
 )
 

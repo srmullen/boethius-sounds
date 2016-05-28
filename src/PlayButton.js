@@ -10,7 +10,7 @@ const PlayButton = React.createClass({
                 if (this.props.ctx.state === "suspended") {
                     this.props.ctx.resume();
                 } else {
-                    const voices = this.props.getMusic();
+                    const voices = this.props.music;
                     for (let voice in voices) {
                         voices[voice].map((item, i) => {
                             const duration = calculateDuration(item).valueOf();
@@ -37,7 +37,8 @@ const PlayButton = React.createClass({
 
 PlayButton.propTypes = {
     ctx: PropTypes.instanceOf(AudioContext).isRequired,
-    out: PropTypes.instanceOf(GainNode).isRequired
+    out: PropTypes.instanceOf(GainNode).isRequired,
+    music: PropTypes.object
 };
 
 export default PlayButton;

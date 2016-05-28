@@ -1,10 +1,8 @@
-import React from "react";
+import React, {PropTypes} from "react";
 import PlayButton from "./PlayButton";
 import PauseButton from "./PauseButton";
 import StopButton from "./StopButton";
-import CodeMirror from "react-codemirror";
-import {parser} from "boethius-lang";
-import {calculateAndSetTimes} from "./time";
+import TimeBar from "./TimeBar";
 
 const Player = React.createClass({
     getInitialState () {
@@ -13,16 +11,9 @@ const Player = React.createClass({
         masterGain.connect(ctx.destination);
         // ctx and masterGain should maybe be props
         return {
-            code: "",
             ctx,
             masterGain
         }
-    },
-
-    updateCode (newCode) {
-        this.setState({
-            code: newCode
-        });
     },
 
     render () {
@@ -31,42 +22,17 @@ const Player = React.createClass({
                 <PlayButton
                     ctx={this.state.ctx}
                     out={this.state.masterGain}
-                    getMusic={() => {
-                        try {
-                            const parsed = parser.parse(this.state.code);
-
-                            const voices = parsed.reduce((acc, item) => {
-                                if (acc[item.voice]) {
-                                    acc[item.voice].push(item);
-                                } else {
-                                    acc[item.voice] = [item];
-                                }
-
-                                return acc;
-                            }, {});
-
-                            // const items = calculateAndSetTimes(parsed);
-                            for (let voice in voices) {
-                                voices[voice] = calculateAndSetTimes(voices[voice]);
-                            }
-
-                            console.log(voices);
-
-                            return voices;
-                        } catch (e) {
-                            console.error(e);
-                        }
-
-                }} />
+                    music={this.props.music} />
                 <PauseButton ctx={this.state.ctx} />
-                <StopButton /> 
-                <CodeMirror
-                    value={this.state.code}
-                    options={{lineNumbers: true}}
-                    onChange={this.updateCode} />
+                <StopButton />
+                <TimeBar />
             </div>
         )
     }
 });
+
+Player.propTypes = {
+    music: PropTypes.object
+}
 
 export default Player;
