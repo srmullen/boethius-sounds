@@ -17,8 +17,8 @@ function isRest (item) {
  * @param item - Scored item. Given an item, return the rational duration of the item;
  * @return Number
  */
+// memoizable?
 export function calculateDuration (item) {
-
 	// If the event has no type it has no duration.
 	if (!(isNote(item) || isChord(item) || isRest(item))) return 0;
 
@@ -35,9 +35,13 @@ export function calculateDuration (item) {
 		dur = dur.mul(s[1]).div(s[0]);
 	}
 
+	if (item.tempo) {
+		// 60 bpm is the default tempo
+		dur = dur.mul(60/item.tempo);
+	}
+
 	return dur;
 }
-
 
 /*
  * From Boethius Voice
@@ -56,4 +60,26 @@ export function calculateAndSetTimes (items, offset=0) {
 
 		return acc.concat([item]);
     }, []);
+}
+
+/*
+ * tempo: Number
+ * Returns a function that translates a beat number into seconds.
+ */
+function bpm (tempo) {
+    return (beat) => {
+		let time = new F(beat, tempo);
+		return time.mul(60).valueOf();
+	}
+}
+
+/*
+ * Transforms both time and duration according to timing.
+ */
+function tempo (timing, notes) {
+	return where("time", timing, notes.map((note) => {
+		let clone = _.clone(note);
+		clone.duration = timing(note.time + note.duration) - timing(note.time);
+		return clone;
+	}));
 }

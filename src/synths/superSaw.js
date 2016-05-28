@@ -1,8 +1,8 @@
 
-function synth (ctx, out, {frequency = 440, value = 4, gain = 0.5, time = 0} = {}) {
+function synth (ctx, out, {frequency = 440, value = 4, duration, gain = 0.5, time = 0} = {}) {
     const now = ctx.currentTime;
     const startTime = now + time;
-    const endTime = startTime + 1/value;
+    const endTime = startTime + (duration || 1/value);
     const gainNode = ctx.createGain();
     const osc = ctx.createOscillator();
 

@@ -1,0 +1,7 @@
+(voice=chords 
+	<c4 e4 g4 b4>/1 <c4 e4 f4 a4> r <c4 e4 f4 a4> r <c4 eb4 f4 a4>/2 r/2 <e4 g4 b3>/1 <e4 a4 c#4> r <e4 a4 c#4> r <e4 g4 a4 c#4>/2
+    )
+
+(voice=bass 
+	c2/2 d2 e2 r/2 r f2
+    )
