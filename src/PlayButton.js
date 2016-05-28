@@ -1,4 +1,5 @@
 import React, {PropTypes} from "react";
+import Play from "./icons/Play";
 import synth from "./synths/superSaw";
 import {calculateDuration} from "./time";
 
@@ -28,10 +29,7 @@ const PlayButton = React.createClass({
                     }
                 }
             }}>
-                <svg className="icon icon-play3" viewBox="0 0 32 32">
-                    <title>play3</title>
-                    <path class="path1" d="M6 4l20 12-20 12z"></path>
-                </svg>
+                <Play />
             </button>
         );
     }

@@ -1,4 +1,5 @@
 import React, {PropTypes} from "react";
+import Pause from "./icons/Pause";
 
 const PauseButton = React.createClass({
     render () {
@@ -6,10 +7,7 @@ const PauseButton = React.createClass({
             <button onClick={() => {
                 this.props.ctx.suspend();
             }}>
-                <svg className="icon icon-pause2" viewBox="0 0 32 32">
-                    <title>pause2</title>
-                    <path class="path1" d="M4 4h10v24h-10zM18 4h10v24h-10z"></path>
-                </svg>
+                <Pause />
             </button>
         );
     }
