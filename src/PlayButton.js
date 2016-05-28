@@ -1,34 +1,10 @@
 import React, {PropTypes} from "react";
 import Play from "./icons/Play";
-import synth from "./synths/superSaw";
-import {calculateDuration} from "./time";
 
 const PlayButton = React.createClass({
     render () {
         return (
-            <button onClick={() => {
-                if (this.props.ctx.state === "suspended") {
-                    this.props.ctx.resume();
-                } else {
-                    const voices = this.props.music;
-                    for (let voice in voices) {
-                        voices[voice].map((item, i) => {
-                            const duration = calculateDuration(item).valueOf();
-                            if (item.type === "note") {
-                                synth(this.props.ctx, this.props.out, {duration, ...item});
-                            } else if (item.type === "chord") {
-                                const time = item.time;
-                                const value = item.value;
-                                item.children.map(child => {
-                                    synth(this.props.ctx, this.props.out, {time, value, duration, ...child});
-                                });
-                            } else {
-                                // do nothing
-                            }
-                        });
-                    }
-                }
-            }}>
+            <button onClick={this.props.onClick}>
                 <Play />
             </button>
         );
@@ -36,9 +12,7 @@ const PlayButton = React.createClass({
 });
 
 PlayButton.propTypes = {
-    ctx: PropTypes.instanceOf(AudioContext).isRequired,
-    out: PropTypes.instanceOf(GainNode).isRequired,
-    music: PropTypes.object
+    onClick: PropTypes.func.isRequired
 };
 
 export default PlayButton;

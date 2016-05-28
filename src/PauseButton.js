@@ -4,9 +4,7 @@ import Pause from "./icons/Pause";
 const PauseButton = React.createClass({
     render () {
         return (
-            <button onClick={() => {
-                this.props.ctx.suspend();
-            }}>
+            <button onClick={this.props.onClick}>
                 <Pause />
             </button>
         );
@@ -14,7 +12,7 @@ const PauseButton = React.createClass({
 });
 
 PauseButton.propTypes = {
-    ctx: PropTypes.instanceOf(AudioContext).isRequired
+    onClick: PropTypes.func.isRequired
 };
 
 export default PauseButton;

@@ -3,6 +3,8 @@ import PlayButton from "./PlayButton";
 import PauseButton from "./PauseButton";
 import StopButton from "./StopButton";
 import TimeBar from "./TimeBar";
+import {calculateDuration} from "./time";
+import synth from "./synths/superSaw";
 
 const Player = React.createClass({
     getInitialState () {
@@ -12,7 +14,7 @@ const Player = React.createClass({
         // ctx and masterGain should maybe be props
         return {
             ctx,
-            masterGain
+            out: masterGain
         }
     },
 
@@ -20,10 +22,32 @@ const Player = React.createClass({
         return (
             <div>
                 <PlayButton
-                    ctx={this.state.ctx}
-                    out={this.state.masterGain}
-                    music={this.props.music} />
-                <PauseButton ctx={this.state.ctx} />
+                    onClick={() => {
+                        if (this.state.ctx.state === "suspended") {
+                            this.state.ctx.resume();
+                        } else {
+                            const voices = this.props.music;
+                            for (let voice in voices) {
+                                voices[voice].map((item, i) => {
+                                    const duration = calculateDuration(item).valueOf();
+                                    if (item.type === "note") {
+                                        synth(this.state.ctx, this.state.out, {duration, ...item});
+                                    } else if (item.type === "chord") {
+                                        const time = item.time;
+                                        const value = item.value;
+                                        item.children.map(child => {
+                                            synth(this.state.ctx, this.state.out, {time, value, duration, ...child});
+                                        });
+                                    } else {
+                                        // do nothing
+                                    }
+                                });
+                            }
+                        }
+                    }} />
+                <PauseButton onClick={() => {
+                    this.state.ctx.suspend();
+                }} />
                 <StopButton />
                 <TimeBar />
             </div>
