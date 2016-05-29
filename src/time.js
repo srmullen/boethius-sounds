@@ -63,6 +63,15 @@ export function calculateAndSetTimes (items, offset=0) {
 }
 
 /*
+ * @param voice - Array of items
+ * @return time in seconds
+ */
+export function getVoiceDuration (voice) {
+	const last = voice[voice.length-1];
+	return calculateDuration(last).add(last.time).valueOf();
+}
+
+/*
  * tempo: Number
  * Returns a function that translates a beat number into seconds.
  */

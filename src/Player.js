@@ -1,10 +1,11 @@
 import React, {PropTypes} from "react";
+import _ from "lodash";
 import PlayButton from "./PlayButton";
 import PauseButton from "./PauseButton";
 import PlayPauseButton from "./PlayPauseButton";
 import StopButton from "./StopButton";
 import TimeBar from "./TimeBar";
-import {calculateDuration} from "./time";
+import {calculateDuration, getVoiceDuration} from "./time";
 import synth from "./synths/superSaw";
 
 const Player = React.createClass({
@@ -16,6 +17,11 @@ const Player = React.createClass({
     },
 
     render () {
+        // get the time the longest voice ends
+        const musicDuration = _.max(_.map(this.props.music, (voice) => {
+            return getVoiceDuration(voice);
+        }));
+
         return (
             <div>
                 <PlayPauseButton
@@ -36,7 +42,7 @@ const Player = React.createClass({
                     }}
                 />
                 <StopButton />
-                <TimeBar ctx={this.props.ctx} time={this.state.time} duration={2} />
+                <TimeBar ctx={this.props.ctx} time={this.state.time} duration={musicDuration || 0} />
             </div>
         )
     },
