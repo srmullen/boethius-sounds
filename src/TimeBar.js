@@ -7,9 +7,14 @@ const TimeBar = React.createClass({
 
     render () {
         return (
-            <div>Time Bar</div>
+            <div>{this.props.time} - {this.props.duration}</div>
         );
     }
 });
+
+TimeBar.propTypes = {
+    time: PropTypes.number.isRequired,
+    duration: PropTypes.number.isRequired
+};
 
 export default TimeBar;
