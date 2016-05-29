@@ -6,8 +6,15 @@ import {calculateAndSetTimes} from "./time";
 
 const Root = React.createClass({
     getInitialState () {
+        const ctx = new AudioContext();
+        ctx.suspend();
+        const out = ctx.createGain();
+        out.connect(ctx.destination);
+
         return {
-            code: ""
+            code: "",
+            ctx,
+            out
         }
     },
 
@@ -21,7 +28,10 @@ const Root = React.createClass({
     render () {
         return (
             <div>
-                <Player music={codeToMusic(this.state.code)}/>
+                <Player
+                    ctx={this.state.ctx}
+                    out={this.state.out}
+                    music={codeToMusic(this.state.code)}/>
                 <CodeMirror
                     value={this.state.code}
                     options={{lineNumbers: true}}

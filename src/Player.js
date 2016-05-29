@@ -22,24 +22,21 @@ const Player = React.createClass({
                     playing={this.state.playing}
                     onPlay={() => {
                         this.switchPlayingState();
-                        if (this.ctx.state === "suspended") {
-                            this.ctx.resume();
-                        } else {
-                            const voices = this.props.music;
-                            for (let voice in voices) {
-                                voices[voice].map(item => {
-                                    this.scheduledEvents = this.scheduledEvents.concat(this.scheduleEvent(item));
-                                });
-                            }
+                        this.props.ctx.resume();
+                        const voices = this.props.music;
+                        for (let voice in voices) {
+                            voices[voice].map(item => {
+                                this.scheduledEvents = this.scheduledEvents.concat(this.scheduleEvent(item));
+                            });
                         }
                     }}
                     onPause={() => {
                         this.switchPlayingState();
-                        this.ctx.suspend();
+                        this.props.ctx.suspend();
                     }}
                 />
                 <StopButton />
-                <TimeBar time={this.state.time} duration={2} />
+                <TimeBar ctx={this.props.ctx} time={this.state.time} duration={2} />
             </div>
         )
     },
@@ -56,24 +53,20 @@ const Player = React.createClass({
     scheduleEvent (item) {
         const duration = calculateDuration(item).valueOf();
         if (item.type === "note") {
-            return synth(this.ctx, this.out, {duration, ...item});
+            return synth(this.props.ctx, this.props.out, {duration, ...item});
         } else if (item.type === "chord") {
             const time = item.time;
             const value = item.value;
             return item.children.map(child => {
-                return synth(this.ctx, this.out, {time, value, duration, ...child});
+                return synth(this.props.ctx, this.props.out, {time, value, duration, ...child});
             });
         }
-    },
-
-    componentDidMount () {
-        this.ctx = new AudioContext();
-        this.out = this.ctx.createGain();
-        this.out.connect(this.ctx.destination);
     }
 });
 
 Player.propTypes = {
+    ctx: PropTypes.instanceOf(AudioContext).isRequired,
+    out: PropTypes.instanceOf(GainNode).isRequired,
     music: PropTypes.object
 }
 

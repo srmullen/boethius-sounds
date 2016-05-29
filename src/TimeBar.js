@@ -14,7 +14,8 @@ const TimeBar = React.createClass({
 
 TimeBar.propTypes = {
     time: PropTypes.number.isRequired,
-    duration: PropTypes.number.isRequired
+    duration: PropTypes.number.isRequired,
+    ctx: PropTypes.instanceOf(AudioContext).isRequired
 };
 
 export default TimeBar;
