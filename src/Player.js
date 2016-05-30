@@ -28,21 +28,39 @@ const Player = React.createClass({
                     playing={this.state.playing}
                     onPlay={() => {
                         this.switchPlayingState();
-                        this.props.ctx.resume();
-                        const voices = this.props.music;
-                        for (let voice in voices) {
-                            voices[voice].map(item => {
-                                this.scheduledEvents = this.scheduledEvents.concat(this.scheduleEvent(item));
-                            });
+                        if (this.props.ctx.state === "suspended") {
+                            this.props.ctx.resume();
+                        } else {
+                            const voices = this.props.music;
+                            for (let voice in voices) {
+                                voices[voice].map(item => {
+                                    this.scheduledEvents = this.scheduledEvents.concat(this.scheduleEvent(item));
+                                });
+                            }
                         }
                     }}
                     onPause={() => {
                         this.switchPlayingState();
                         this.props.ctx.suspend();
-                    }}
-                />
-                <StopButton />
-                <TimeBar ctx={this.props.ctx} time={this.state.time} duration={musicDuration || 0} />
+                    }} />
+                <StopButton
+                    onClick={() => {
+                        this.scheduledEvents.map((event) => {
+                            if (event && event.stop) {
+                                event.stop();
+                            }
+                        });
+
+                        this.setState({
+                            playing: false
+                        });
+
+                        this.scheduledEvents = [];
+                    }} />
+                <TimeBar
+                    ctx={this.props.ctx}
+                    time={this.state.time}
+                    duration={musicDuration || 0} />
             </div>
         )
     },

@@ -7,7 +7,9 @@ const TimeBar = React.createClass({
 
     render () {
         return (
-            <div>{this.props.time} - {this.props.duration}</div>
+            <div style={{border: "1px solid black", width: "50%"}}>
+                {this.props.time} - {this.props.duration}
+            </div>
         );
     }
 });

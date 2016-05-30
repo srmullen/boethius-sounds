@@ -4,7 +4,7 @@ import Stop from "./icons/Stop";
 const StopButton = React.createClass({
     render () {
         return (
-            <button>
+            <button onClick={this.props.onClick}>
                 <Stop />
             </button>
         );
@@ -12,7 +12,7 @@ const StopButton = React.createClass({
 });
 
 StopButton.propTypes = {
-
+    onClick: PropTypes.func.isRequired
 };
 
 export default StopButton;
