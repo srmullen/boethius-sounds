@@ -6,7 +6,7 @@ import PlayPauseButton from "./PlayPauseButton";
 import StopButton from "./StopButton";
 import TimeBar from "./TimeBar";
 import {calculateDuration, getVoiceDuration, startTimer} from "./time";
-import synth from "./synths/superSaw";
+import {getSynth} from "./synths/synths";
 
 const Player = React.createClass({
     getInitialState () {
@@ -105,6 +105,7 @@ const Player = React.createClass({
 
     scheduleEvent (item) {
         const duration = calculateDuration(item).valueOf();
+        const synth = getSynth(item);
         if (item.type === "note") {
             return synth(this.props.ctx, this.props.out, {duration, ...item});
         } else if (item.type === "chord") {
