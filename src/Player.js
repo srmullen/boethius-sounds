@@ -5,7 +5,7 @@ import PauseButton from "./PauseButton";
 import PlayPauseButton from "./PlayPauseButton";
 import StopButton from "./StopButton";
 import TimeBar from "./TimeBar";
-import {calculateDuration, getVoiceDuration} from "./time";
+import {calculateDuration, getVoiceDuration, startTimer} from "./time";
 import synth from "./synths/superSaw";
 
 const Player = React.createClass({
@@ -27,6 +27,7 @@ const Player = React.createClass({
                 <PlayPauseButton
                     playing={this.state.playing}
                     onPlay={() => {
+                        const startTime = this.props.ctx.currentTime;
                         this.switchPlayingState();
                         if (this.props.ctx.state === "suspended") {
                             this.props.ctx.resume();
@@ -37,7 +38,21 @@ const Player = React.createClass({
                                     this.scheduledEvents = this.scheduledEvents.concat(this.scheduleEvent(item));
                                 });
                             }
+
+                            const stop = startTimer((next) => {
+                                if (this.props.ctx.currentTime >= startTime + musicDuration) {
+                                    this.setState({
+                                        playing: false
+                                    });
+                                } else {
+                                    this.setState({
+                                        time: this.props.ctx.currentTime
+                                    });
+                                    next();
+                                }
+                            }, 100);
                         }
+
                     }}
                     onPause={() => {
                         this.switchPlayingState();

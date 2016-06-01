@@ -92,3 +92,21 @@ function tempo (timing, notes) {
 		return clone;
 	}));
 }
+
+export function startTimer (fn, rate) {
+	let timeout;
+
+	function next () {
+		timeout = setTimeout(function () {
+			fn(next);
+		}, rate);
+	}
+
+	timeout = setTimeout(function () {
+		fn(next);
+	}, rate);
+
+	return () => {
+		clearTimeout(timeout);
+	};
+}
