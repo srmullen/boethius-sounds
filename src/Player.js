@@ -28,6 +28,7 @@ const Player = React.createClass({
                     playing={this.state.playing}
                     onPlay={() => {
                         const startTime = this.props.ctx.currentTime;
+                        const endTime = startTime + musicDuration;
                         this.switchPlayingState();
                         if (this.props.ctx.state === "suspended") {
                             this.props.ctx.resume();
@@ -39,18 +40,20 @@ const Player = React.createClass({
                                 });
                             }
 
-                            const stop = startTimer((next) => {
-                                if (this.props.ctx.currentTime >= startTime + musicDuration) {
+                            // start timer and assign it to components stopTimer function
+                            this.stopTimer = startTimer((next) => {
+                                if (this.props.ctx.currentTime >= endTime) {
                                     this.setState({
-                                        playing: false
+                                        playing: false,
+                                        time: musicDuration
                                     });
                                 } else {
                                     this.setState({
-                                        time: this.props.ctx.currentTime
+                                        time: (this.props.ctx.currentTime - startTime)
                                     });
                                     next();
                                 }
-                            }, 100);
+                            }, 10);
                         }
 
                     }}
@@ -60,6 +63,8 @@ const Player = React.createClass({
                     }} />
                 <StopButton
                     onClick={() => {
+                        if (this.stopTimer) this.stopTimer();
+
                         this.scheduledEvents.map((event) => {
                             if (event && event.stop) {
                                 event.stop();
@@ -67,10 +72,16 @@ const Player = React.createClass({
                         });
 
                         this.setState({
-                            playing: false
+                            playing: false,
+                            time: 0
                         });
 
                         this.scheduledEvents = [];
+
+                        // if the player is paused restart the audio context
+                        if (this.props.ctx.state === "suspended") {
+                            this.props.ctx.resume();
+                        }
                     }} />
                 <TimeBar
                     ctx={this.props.ctx}
@@ -88,6 +99,9 @@ const Player = React.createClass({
 
     // List of events to be played
     scheduledEvents: [],
+
+    // function to stop the running timer
+    stopTimer: undefined,
 
     scheduleEvent (item) {
         const duration = calculateDuration(item).valueOf();
