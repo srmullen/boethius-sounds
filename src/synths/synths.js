@@ -1,9 +1,11 @@
 import square from "./square";
 import sine from "./sine";
+import saw from "./saw";
 
 const SYNTHS = {
     square,
     sine,
+    saw,
     defaultSynth: sine
 };
 
