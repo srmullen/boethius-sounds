@@ -33,7 +33,7 @@ const Root = React.createClass({
                     music={codeToMusic(this.state.code)} />
                 <CodeMirror
                     value={this.state.code}
-                    options={{lineNumbers: true}}
+                    options={{lineNumbers: true, theme: "paraiso-light"}}
                     onChange={this.updateCode} />
             </div>
         );
