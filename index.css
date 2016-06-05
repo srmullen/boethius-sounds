@@ -10,3 +10,13 @@ body {
 	height: 1em;
 	fill: currentColor;
 }
+
+@font-face {
+	font-family: 'gonville';
+	src: url('src/boethius/styles/fonts/gonvillepart1.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'gonvillealpha';
+	src: url('src/boethius/styles/fonts/gonvillealpha11.ttf') format('truetype');
+}
