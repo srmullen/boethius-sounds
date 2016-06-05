@@ -1,5 +1,6 @@
 import React from "react";
 import Player from "./Player";
+import Sheet from "./Sheet";
 import CodeMirror from "react-codemirror";
 import {parser} from "boethius-lang";
 import {calculateAndSetTimes} from "./time";
@@ -31,10 +32,17 @@ const Root = React.createClass({
                     ctx={this.state.ctx}
                     out={this.state.out}
                     music={codeToMusic(this.state.code)} />
-                <CodeMirror
-                    value={this.state.code}
-                    options={{lineNumbers: true, theme: "paraiso-light"}}
-                    onChange={this.updateCode} />
+                <div>
+                    <div style={{float: "left", width: "50%"}}>
+                        <CodeMirror
+                            value={this.state.code}
+                            options={{lineNumbers: true, theme: "paraiso-light"}}
+                            onChange={this.updateCode} />
+                    </div>
+                    <div style={{float: "right", width: "50%"}}>
+                        <Sheet />
+                    </div>
+                </div>
             </div>
         );
     }
