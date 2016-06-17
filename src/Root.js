@@ -1,9 +1,9 @@
 import React from "react";
-import Player from "./Player";
+import Player from "./boethius-player/Player";
 import Sheet from "./Sheet";
 import CodeMirror from "react-codemirror";
 import {parser} from "boethius-lang";
-import {calculateAndSetTimes} from "./time";
+import {getSynth} from "./synths/synths";
 
 const Root = React.createClass({
     getInitialState () {
@@ -18,7 +18,6 @@ const Root = React.createClass({
         }
     },
 
-
     updateCode (newCode) {
         this.setState({
             code: newCode
@@ -31,6 +30,7 @@ const Root = React.createClass({
                 <Player
                     ctx={this.state.ctx}
                     out={this.state.out}
+                    getSynth={getSynth}
                     music={codeToMusic(this.state.code)} />
                 <div>
                     <div style={{float: "left", width: "50%"}}>
@@ -61,13 +61,6 @@ function codeToMusic (code) {
 
             return acc;
         }, {});
-
-        // const items = calculateAndSetTimes(parsed);
-        for (let voice in voices) {
-            voices[voice] = calculateAndSetTimes(voices[voice]);
-        }
-
-        console.log(voices);
 
         return voices;
     } catch (e) {
