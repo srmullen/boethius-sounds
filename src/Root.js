@@ -1,4 +1,6 @@
 import React from "react";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 import Player from "./boethius-player/Player";
 import Layout from "./boethius-layout/Layout";
 import Sheet from "./Sheet";
@@ -6,6 +8,7 @@ import CodeMirror from "react-codemirror";
 import TabbedViews from "./TabbedViews";
 import {parser} from "boethius-lang";
 import {getSynth} from "./synths/synths";
+import * as tabActions from "./actions/tabActions";
 
 const Root = React.createClass({
     getInitialState () {
@@ -45,9 +48,7 @@ const Root = React.createClass({
                     <div style={{float: "left", width: "50%"}}>
                         <TabbedViews
                             viewIndex={0}
-                            onTabChange={
-                                (i) => {console.log(`tab changed ${i}`);
-                                }}>
+                            onTabChange={this.props.changeTab}>
                             <CodeMirror
                                 title={"Music"}
                                 value={this.state.code}
@@ -98,4 +99,12 @@ function codeToMusic (code) {
     }
 }
 
-export default Root;
+function mapStateToProps (state) {
+
+}
+
+function mapDispatchToProps (dispatch) {
+    return bindActionCreators(tabActions, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(Root);
