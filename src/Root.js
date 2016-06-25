@@ -3,6 +3,7 @@ import Player from "./boethius-player/Player";
 import Layout from "./boethius-layout/Layout";
 import Sheet from "./Sheet";
 import CodeMirror from "react-codemirror";
+import TabbedViews from "./TabbedViews";
 import {parser} from "boethius-lang";
 import {getSynth} from "./synths/synths";
 
@@ -31,22 +32,10 @@ const Root = React.createClass({
     },
 
     render () {
+        const hidden = {display: "none"};
         return (
             <div>
-                <Layout
-                    layout={this.state.layout}
-                    voices={["lh", "rh"]}
-                    addSystem={() => console.log("add system")}
-                    removeSystem={() => console.log("remove system")}
-                    updateSystem={() => console.log("update system")}
-                    addLine={() => console.log("add line")}
-                    removeLine={() => console.log("remove line")}
-                    updateLine={() => console.log("update line")}
-                    updateTimeSig={() => console.log("update time sig")}
-                    changeStaffSpacing={() => console.log("change staff spacing")}
-                    changeTitle={() => console.log("change title")}
-                    changeComposer={() => console.log("change composer")}
-                     />
+
                 <Player
                     ctx={this.state.ctx}
                     out={this.state.out}
@@ -54,10 +43,31 @@ const Root = React.createClass({
                     music={codeToMusic(this.state.code)} />
                 <div>
                     <div style={{float: "left", width: "50%"}}>
-                        <CodeMirror
-                            value={this.state.code}
-                            options={{lineNumbers: true, theme: "paraiso-light"}}
-                            onChange={this.updateCode} />
+                        <TabbedViews
+                            viewIndex={0}
+                            onTabChange={
+                                (i) => {console.log(`tab changed ${i}`);
+                                }}>
+                            <CodeMirror
+                                title={"Music"}
+                                value={this.state.code}
+                                options={{lineNumbers: true, theme: "paraiso-light"}}
+                                onChange={this.updateCode} />
+                            <Layout
+                                title={"Layout"}
+                                layout={this.state.layout}
+                                voices={["lh", "rh"]}
+                                addSystem={() => console.log("add system")}
+                                removeSystem={() => console.log("remove system")}
+                                updateSystem={() => console.log("update system")}
+                                addLine={() => console.log("add line")}
+                                removeLine={() => console.log("remove line")}
+                                updateLine={() => console.log("update line")}
+                                updateTimeSig={() => console.log("update time sig")}
+                                changeStaffSpacing={() => console.log("change staff spacing")}
+                                changeTitle={() => console.log("change title")}
+                                changeComposer={() => console.log("change composer")} />
+                        </TabbedViews>
                     </div>
                     <div style={{float: "right", width: "50%"}}>
                         <Sheet />
